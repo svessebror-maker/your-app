@@ -1,7 +1,7 @@
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import type { SessionUser } from './database';
+import { hasFullPermissions, type SessionUser } from './database';
 
 type Props = {
   user: SessionUser;
@@ -17,7 +17,12 @@ export function HomeScreen({ user, onLogout }: Props) {
         </View>
         <Text style={styles.title}>Signed in</Text>
         <Text style={styles.subtitle}>{user.username}</Text>
-        <Text style={styles.meta}>Authenticated against the local SQLite users table.</Text>
+        <Text style={styles.meta}>
+          Permissions: {hasFullPermissions(user) ? 'Full access' : 'Basic access'}
+        </Text>
+        {hasFullPermissions(user) ? (
+          <Text style={styles.badge}>Moderator account</Text>
+        ) : null}
         <Pressable
           onPress={onLogout}
           style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
@@ -67,6 +72,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 15,
     color: '#8E8E93',
+  },
+  badge: {
+    alignSelf: 'center',
+    marginTop: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+    overflow: 'hidden',
+    backgroundColor: '#E8F1FF',
+    color: '#007AFF',
+    fontSize: 13,
+    fontWeight: '600',
   },
   button: {
     marginTop: 32,

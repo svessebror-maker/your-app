@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { DEMO_PASSWORD, DEMO_USERNAME, login, type SessionUser } from './database';
+import { login, SEED_ACCOUNTS, type SessionUser } from './database';
 
 type Props = {
   onLoggedIn: (user: SessionUser) => void;
@@ -120,9 +120,15 @@ export function LoginScreen({ onLoggedIn }: Props) {
             )}
           </Pressable>
 
-          <Text style={styles.hint}>
-            Seeded user: {DEMO_USERNAME} / {DEMO_PASSWORD}
-          </Text>
+          <View style={styles.hintCard}>
+            <Text style={styles.hintTitle}>Seeded accounts</Text>
+            {SEED_ACCOUNTS.map((account) => (
+              <Text key={account.username} style={styles.hintRow}>
+                {account.username} / {account.password}
+                {account.permissions === 'full' ? ' (full access)' : ''}
+              </Text>
+            ))}
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -224,10 +230,24 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '600',
   },
-  hint: {
+  hintCard: {
     marginTop: 18,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
+  },
+  hintTitle: {
     textAlign: 'center',
     color: '#8E8E93',
     fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  hintRow: {
+    textAlign: 'center',
+    color: '#636366',
+    fontSize: 13,
+    lineHeight: 20,
   },
 });
